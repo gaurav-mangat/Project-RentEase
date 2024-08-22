@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"log"
@@ -49,19 +50,19 @@ func connectToMongoDB(uri string) (*mongo.Client, error) {
 }
 
 // SaveUser saves a user to the MongoDB collection.
-func (r *UserRepo) SaveUser(user entities.User) error {
-	_, err := r.collection.InsertOne(context.TODO(), user)
+func (repo *UserRepo) SaveUser(user entities.User) error {
+	_, err := repo.collection.InsertOne(context.TODO(), user)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *UserRepo) FindByUsername(ctx context.Context, username string) (*entities.User, error) {
+func (repo *UserRepo) FindByUsername(ctx context.Context, username string) (*entities.User, error) {
 	var user entities.User
 	filter := bson.D{{"username", username}}
 
-	err := r.collection.FindOne(ctx, filter).Decode(&user)
+	err := repo.collection.FindOne(ctx, filter).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return nil, nil // No document found
@@ -73,8 +74,8 @@ func (r *UserRepo) FindByUsername(ctx context.Context, username string) (*entiti
 }
 
 // CheckPassword verifies the user's password.
-func (r *UserRepo) CheckPassword(ctx context.Context, username, password string) (bool, error) {
-	user, err := r.FindByUsername(ctx, username)
+func (repo *UserRepo) CheckPassword(ctx context.Context, username, password string) (bool, error) {
+	user, err := repo.FindByUsername(ctx, username)
 	if err != nil {
 		return false, err
 	}
@@ -86,4 +87,15 @@ func (r *UserRepo) CheckPassword(ctx context.Context, username, password string)
 	return utils.CheckPasswordHash(password, user.PasswordHash), nil
 }
 
-//func (r *UserRepo) FindByEmail(ctx context.Context, email string) (*entities.User, error) {}
+func (repo *UserRepo) UpdateUser(user entities.User) error {
+	filter := bson.M{"username": user.Username}
+	update := bson.M{"$set": user}
+	result, err := repo.collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		return err
+	}
+	if result.MatchedCount == 0 {
+		return errors.New("user not found")
+	}
+	return nil
+}

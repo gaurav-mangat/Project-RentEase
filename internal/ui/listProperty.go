@@ -16,7 +16,7 @@ func (ui *UI) ListPropertyUI() {
 	title := utils.ReadInput("\nEnter property title: ")
 
 	// Collect common property details
-	area := utils.ReadInput("Enter area: ")
+	area := utils.ReadInput("Enter locality: ")
 	city := utils.ReadInput("Enter city: ")
 	state := utils.ReadInput("Enter state: ")
 

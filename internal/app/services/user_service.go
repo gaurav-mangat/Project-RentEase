@@ -2,7 +2,9 @@ package services
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"rentease/internal/domain/entities"
 	"rentease/internal/domain/interfaces"
 	"rentease/pkg/utils"
@@ -22,7 +24,6 @@ func NewUserService(userRepo interfaces.UserRepo) *UserService {
 //}
 
 func (us *UserService) SignUp(user entities.User) bool {
-	// chota mota logic no db involved
 	err := us.userRepo.SaveUser(user)
 	if err != nil {
 		fmt.Println(err)
@@ -55,4 +56,37 @@ func (us *UserService) Login(username, password string) (bool, error) {
 
 }
 
-//func (us *UserService) getUser(username string) (entities.User, error) {}
+func (us *UserService) AddToWishlist(username string, propertyID primitive.ObjectID) error {
+	ctx := context.TODO() // Use a proper context in real applications
+
+	user, err := us.userRepo.FindByUsername(ctx, username)
+	if err != nil {
+		return err
+	}
+
+	if user == nil {
+		return errors.New("user not found")
+	}
+
+	// Check if the property is already in the wishlist
+	for _, id := range user.Wishlist {
+		if id == propertyID {
+			return errors.New("property is already in the wishlist")
+		}
+	}
+
+	// Add the property ID to the wishlist
+	user.Wishlist = append(user.Wishlist, propertyID)
+
+	// Update the user record
+	err = us.userRepo.UpdateUser(*user)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (us *UserService) UpdateUser(user entities.User) error {
+	return us.userRepo.UpdateUser(user)
+}

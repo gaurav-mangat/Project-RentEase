@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"rentease/internal/domain/entities"
 	"rentease/internal/domain/interfaces"
@@ -38,10 +39,20 @@ func (r *PropertyRepo) SaveProperty(property entities.Property) error {
 	return nil
 }
 
-// GetAllListedProperties retrieves all listed properties from the collection.
-func (r *PropertyRepo) GetAllListedProperties() ([]entities.Property, error) {
-	// Create a filter to match properties by the landlord's username
-	filter := bson.D{{"landlordusername", utils.ActiveUser}}
+// GetProperties retrieves properties based on the provided filter option.
+// If `forActiveUserOnly` is true, it returns properties for the active user only.
+// If `forActiveUserOnly` is false, it returns properties for all users.
+func (r *PropertyRepo) GetAllListedProperties(forActiveUserOnly bool) ([]entities.Property, error) {
+	var filter bson.D
+
+	// Apply filter based on the forActiveUserOnly flag
+	if forActiveUserOnly {
+		// Filter for the active user only
+		filter = bson.D{{"landlordusername", utils.ActiveUser}}
+	} else {
+		// No filter, retrieve all properties
+		filter = bson.D{}
+	}
 
 	// Query the database with the filter
 	cursor, err := r.collection.Find(context.TODO(), filter)
@@ -94,11 +105,14 @@ func (r *PropertyRepo) GetAllListedProperties() ([]entities.Property, error) {
 
 // UpdateListedProperty updates an existing property in the collection.
 func (r *PropertyRepo) UpdateListedProperty(property entities.Property) error {
-	filter := bson.D{{"title", property.Title}}
+
+	filter := bson.D{{"_id", property.ID}}
 	update := bson.D{
 		{"$set", bson.D{
+			{"title", property.Title},
 			{"address", property.Address},
 			{"landlordusername", property.LandlordUsername},
+			{"rentamount", property.RentAmount},
 			{"isapproved", property.IsApproved},
 			{"details", property.Details},
 		}},
@@ -124,4 +138,20 @@ func (r *PropertyRepo) DeleteListedProperty(propertyTitle string) error {
 		return err
 	}
 	return nil
+}
+
+// FindByID retrieves a property by its ID from the MongoDB collection.
+func (r *PropertyRepo) FindByID(ctx context.Context, id primitive.ObjectID) (*entities.Property, error) {
+	var property entities.Property
+	filter := bson.D{{"_id", id}}
+
+	err := r.collection.FindOne(ctx, filter).Decode(&property)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil // No document found
+		}
+		return nil, fmt.Errorf("failed to find property by ID: %w", err) // Wrap other errors
+	}
+
+	return &property, nil
 }

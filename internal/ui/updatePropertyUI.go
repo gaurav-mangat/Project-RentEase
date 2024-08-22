@@ -56,6 +56,7 @@ func (ui *UI) UpdatePropertyUI(property entities.Property) {
 		var newRentAmount float64
 		_, err := fmt.Sscanf(newRentAmountStr, "%f", &newRentAmount)
 		if err == nil {
+			fmt.Printf("Rent amount %T: ", newRentAmount) //fsgsgsgsg
 			updatedProperty.RentAmount = newRentAmount
 		} else {
 			fmt.Println("\033[1;31mInvalid rent amount format.\033[0m") // Red
@@ -67,8 +68,9 @@ func (ui *UI) UpdatePropertyUI(property entities.Property) {
 	switch property.Details.(type) {
 	case entities.CommercialDetails:
 		// Handle Commercial-specific updates
-		if utils.ReadInput("Update commercial details (floor area, subtype)? (yes/no): ") == "yes" {
-			newFloorArea := utils.ReadInput("Enter new floor area (leave blank to skip): ")
+		fmt.Println("\033[1;31mUpdated details\033[0m", updatedProperty) //gsgsgsgsg
+		if utils.ReadInput("Update Other details (floor area, subtype)? (yes/no): ") == "yes" {
+			newFloorArea := utils.ReadInput("Enter new floor area in sq. feet (leave blank to skip): ")
 			if newFloorArea != "" {
 				updatedProperty.Details = entities.CommercialDetails{
 					FloorArea: newFloorArea,

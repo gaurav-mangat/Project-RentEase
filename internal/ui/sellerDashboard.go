@@ -31,7 +31,7 @@ func (ui *UI) sellerDashboard() {
 			ui.ListPropertyUI()
 		case 2:
 			fmt.Println("\033[1;33m\nViewing and managing listed properties...\033[0m") // Yellow
-			listedProperties, err := ui.propertyService.GetAllListedProperties()
+			listedProperties, err := ui.propertyService.GetAllListedProperties(true)
 			if err != nil {
 				fmt.Printf("\033[1;31mError fetching listed properties: %v\033[0m\n", err)
 				continue
@@ -44,7 +44,7 @@ func (ui *UI) sellerDashboard() {
 
 			// Display properties with indexing
 			for i, property := range listedProperties {
-				fmt.Printf("\n%d. ", i+1)
+				fmt.Printf("\n%d. \n", i+1)
 				utils.DisplayProperty(property)
 			}
 

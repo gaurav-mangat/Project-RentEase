@@ -64,6 +64,9 @@ func (ui *UI) SearchPropertyUI() {
 		}
 
 		prop := properties[choice-1]
+
+		fmt.Printf("Property ID: %s\n", prop.ID)
+
 		utils.DisplayProperty(prop)
 		fmt.Println("\nLandlord Details are:")
 		fmt.Println("Fetching landlord details...")
@@ -78,6 +81,21 @@ func (ui *UI) SearchPropertyUI() {
 		fmt.Printf("  Landlord Phone: %s\n", landlord.PhoneNumber)
 		fmt.Printf("  Landlord Email: %s\n", landlord.Email)
 		fmt.Printf("  Landlord Address: %s\n", landlord.Address)
+
+		// Option to add property to wishlist
+		fmt.Print("\nWould you like to add this property to your wishlist? (yes/no): ")
+		var addToWishlist string
+		fmt.Scan(&addToWishlist)
+		addToWishlist = strings.ToLower(addToWishlist)
+
+		if addToWishlist == "yes" {
+			err := ui.userService.AddToWishlist(utils.ActiveUser, prop.ID)
+			if err != nil {
+				fmt.Printf("\033[1;31mError adding property to wishlist: %v\033[0m\n", err) // Red
+			} else {
+				fmt.Println("\033[1;32mProperty added to wishlist successfully.\033[0m") // Green
+			}
+		}
 
 		fmt.Print("\nWould you like to see details of another property? (yes/no): ")
 		var response string

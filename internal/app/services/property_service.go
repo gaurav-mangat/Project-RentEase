@@ -1,6 +1,8 @@
 package services
 
 import (
+	"context"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"rentease/internal/domain/entities"
 	"rentease/internal/domain/interfaces"
 	"strings"
@@ -22,8 +24,8 @@ func (ps *PropertyService) ListProperty(property entities.Property) error {
 }
 
 // GetAllListedProperties retrieves all listed properties from the repository.
-func (ps *PropertyService) GetAllListedProperties() ([]entities.Property, error) {
-	return ps.propertyRepo.GetAllListedProperties()
+func (ps *PropertyService) GetAllListedProperties(activeUseronly bool) ([]entities.Property, error) {
+	return ps.propertyRepo.GetAllListedProperties(activeUseronly)
 }
 
 // UpdateListedProperty updates a property in the repository.
@@ -43,7 +45,7 @@ func (ps *PropertyService) DeleteListedProperty(propertyID string) error {
 
 // SearchProperties searches for properties based on the given criteria.
 func (ps *PropertyService) SearchProperties(area, city, state string, pincode, propertyType int) ([]entities.Property, error) {
-	properties, err := ps.propertyRepo.GetAllListedProperties()
+	properties, err := ps.propertyRepo.GetAllListedProperties(false)
 	if err != nil {
 		return nil, err
 	}
@@ -71,4 +73,20 @@ func (ps *PropertyService) SearchProperties(area, city, state string, pincode, p
 	}
 
 	return results, nil
+}
+
+// FindByID retrieves a property by its ID.
+func (ps *PropertyService) FindByID(id primitive.ObjectID) (entities.Property, error) {
+	// Use context in a real application
+	ctx := context.TODO()
+
+	property, err := ps.propertyRepo.FindByID(ctx, id)
+	if err != nil {
+		return entities.Property{}, err
+	}
+	if property == nil {
+		return entities.Property{}, nil // Property not found
+	}
+
+	return *property, nil
 }

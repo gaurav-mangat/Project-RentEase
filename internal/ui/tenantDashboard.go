@@ -20,7 +20,7 @@ func (ui *UI) TenantDashboardUI() {
 		case "1":
 			ui.SearchPropertyUI()
 		case "2":
-			//ui.ViewWishlistUI()
+			ui.ShowWishlist()
 		case "3":
 			fmt.Println("\033[1;32mLogging out...\033[0m") // Green
 			return
