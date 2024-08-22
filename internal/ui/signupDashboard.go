@@ -25,7 +25,7 @@ func (ui *UI) SignUpDashboard() {
 		} else {
 			fmt.Println("\033[1;31mInvalid username.\nPlease enter a valid username.\n\033[0m")
 		}
-		user, _ := ui.userService.Findbyuname(username)
+		user, _ := ui.userService.FindByUsername(username)
 		if user != (entities.User{}) {
 			fmt.Println("This username already exists.")
 			valid = false

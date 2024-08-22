@@ -2,13 +2,14 @@ package ui
 
 import (
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"rentease/internal/domain/entities"
 	"rentease/pkg/utils"
 	"strings"
 )
 
+// ListPropertyUI handles user input to create and list a property.
 func (ui *UI) ListPropertyUI() {
-
 	fmt.Print("Enter property type (1. Commercial, 2. House, 3. Flat): ")
 	var propertyType int
 	fmt.Scanf("%d", &propertyType)
@@ -21,7 +22,11 @@ func (ui *UI) ListPropertyUI() {
 
 	var pincode int
 	pincode = utils.ReadPincode()
-	landlordUsername := utils.ReadInput("Enter landlord username: ")
+	landlordUsername := utils.ActiveUser
+
+	fmt.Print("Enter your expected rent amount: ")
+	var rentAmount int
+	fmt.Scanf("%f", &rentAmount)
 
 	var details interface{}
 	switch propertyType {
@@ -70,6 +75,7 @@ func (ui *UI) ListPropertyUI() {
 	}
 
 	property := entities.Property{
+		ID:               primitive.NewObjectID(), // Generate a new unique ID
 		PropertyType:     propertyType,
 		Title:            title,
 		Address:          entities.Address{Area: area, City: city, State: state, Pincode: pincode},

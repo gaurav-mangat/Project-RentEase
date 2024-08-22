@@ -9,6 +9,7 @@ type PropertyRepo interface {
 	GetAllListedProperties() ([]entities.Property, error)
 	UpdateListedProperty(property entities.Property) error
 	DeleteListedProperty(propertyID string) error
+	//SearchProperties(area, city, state string, pincode int) ([]entities.Property, error)
 }
 
 //type PropertyService interface {

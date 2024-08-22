@@ -31,7 +31,7 @@ func (us *UserService) SignUp(user entities.User) bool {
 
 }
 
-func (us *UserService) Findbyuname(username string) (entities.User, error) {
+func (us *UserService) FindByUsername(username string) (entities.User, error) {
 	user, err := us.userRepo.FindByUsername(context.Background(), username)
 	if err != nil {
 		return entities.User{}, err

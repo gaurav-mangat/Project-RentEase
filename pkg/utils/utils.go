@@ -90,7 +90,7 @@ func ReadPincode() int {
 	var pincode int
 
 	for {
-		fmt.Print("Enter a 6-digit pincode: ")
+		fmt.Print("Enter a 6-digit pincode (mandatory): ")
 		_, err := fmt.Scan(&pincode)
 
 		// Check if there's an error in scanning or if the pincode is not 6 digits
@@ -122,8 +122,8 @@ func DisplayProperty(property entities.Property) {
 
 	fmt.Printf("Property Title: %s\n", property.Title)
 	fmt.Printf("Address: %s, %s, %s, %d\n", property.Address.Area, property.Address.City, property.Address.State, property.Address.Pincode)
-	fmt.Printf("Landlord Username: %s\n", property.LandlordUsername)
 	fmt.Printf("Is Approved: %v\n", property.IsApproved)
+	fmt.Printf("Expected Rent Amount: %f\n", property.RentAmount)
 
 	fmt.Println("Other Details:")
 
@@ -143,6 +143,7 @@ func DisplayProperty(property entities.Property) {
 		fmt.Println("  Unknown property details")
 	}
 	fmt.Println()
+
 }
 
 // DisplayProperties prints a list of properties using DisplayProperty for each.
@@ -151,4 +152,17 @@ func DisplayProperties(properties []entities.Property) {
 		fmt.Printf("Property #%d:\n", i+1)
 		DisplayProperty(property)
 	}
+}
+
+func DisplayPropertyshortInfo(properties []entities.Property) {
+	// Display the list of properties with short info
+	for i, property := range properties {
+		fmt.Printf("Property #%d:\n", i+1)
+		fmt.Printf("  Title: %s\n", property.Title)
+		fmt.Printf("  Rent Amount: %f\n", property.RentAmount)
+		fmt.Printf("  Address: %s, %s, %s, %d\n", property.Address.Area, property.Address.City, property.Address.State, property.Address.Pincode)
+		fmt.Println()
+	}
+
+	//Continuously prompt the user to select a property number for more details until valid input is given
 }

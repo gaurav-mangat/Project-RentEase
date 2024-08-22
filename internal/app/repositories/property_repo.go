@@ -40,7 +40,6 @@ func (r *PropertyRepo) SaveProperty(property entities.Property) error {
 
 // GetAllListedProperties retrieves all listed properties from the collection.
 func (r *PropertyRepo) GetAllListedProperties() ([]entities.Property, error) {
-
 	// Create a filter to match properties by the landlord's username
 	filter := bson.D{{"landlordusername", utils.ActiveUser}}
 
@@ -54,9 +53,35 @@ func (r *PropertyRepo) GetAllListedProperties() ([]entities.Property, error) {
 	var properties []entities.Property
 	for cursor.Next(context.TODO()) {
 		var property entities.Property
+		// Decode the base property structure first
 		if err := cursor.Decode(&property); err != nil {
 			return nil, fmt.Errorf("failed to decode property: %w", err)
 		}
+
+		// Decode the Details field based on PropertyType
+		switch property.PropertyType {
+		case 1: // Commercial
+			var details entities.CommercialDetails
+			if err := bson.Unmarshal(cursor.Current.Lookup("details").Value, &details); err != nil {
+				return nil, fmt.Errorf("failed to decode commercial details: %w", err)
+			}
+			property.Details = details
+		case 2: // House
+			var details entities.HouseDetails
+			if err := bson.Unmarshal(cursor.Current.Lookup("details").Value, &details); err != nil {
+				return nil, fmt.Errorf("failed to decode house details: %w", err)
+			}
+			property.Details = details
+		case 3: // Flat
+			var details entities.FlatDetails
+			if err := bson.Unmarshal(cursor.Current.Lookup("details").Value, &details); err != nil {
+				return nil, fmt.Errorf("failed to decode flat details: %w", err)
+			}
+			property.Details = details
+		default:
+			// Unknown property type, Details will remain nil
+		}
+
 		properties = append(properties, property)
 	}
 
@@ -73,11 +98,17 @@ func (r *PropertyRepo) UpdateListedProperty(property entities.Property) error {
 	update := bson.D{
 		{"$set", bson.D{
 			{"address", property.Address},
-			{"landlord_username", property.LandlordUsername},
-			{"is_approved", property.IsApproved},
+			{"landlordusername", property.LandlordUsername},
+			{"isapproved", property.IsApproved},
 			{"details", property.Details},
 		}},
 	}
+
+	// If the property is approved, reset its approval status to false
+	if property.IsApproved {
+		property.IsApproved = false
+	}
+
 	_, err := r.collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		return err
@@ -85,9 +116,9 @@ func (r *PropertyRepo) UpdateListedProperty(property entities.Property) error {
 	return nil
 }
 
-// DeleteListedProperty deletes a property from the collection by ID.
-func (r *PropertyRepo) DeleteListedProperty(propertyID string) error {
-	filter := bson.D{{"title", propertyID}}
+// DeleteListedProperty deletes a property from the collection by title.
+func (r *PropertyRepo) DeleteListedProperty(propertyTitle string) error {
+	filter := bson.D{{"title", propertyTitle}}
 	_, err := r.collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
 		return err

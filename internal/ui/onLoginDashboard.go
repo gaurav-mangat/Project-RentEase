@@ -11,8 +11,8 @@ func (ui *UI) onLoginDashboard(username string) {
 		fmt.Println("\033[1;31m                          DASHBOARD                            \033[0m")  // Red bold
 		fmt.Println("\033[1;36m----------------------------------------------------------------\033[0m") // Sky blue
 
-		fmt.Println("\033[1;32m1. Seller Section\033[0m")    // Green
-		fmt.Println("\033[1;32m2. Buyer Section\033[0m")     // Green
+		fmt.Println("\033[1;32m1. LandLord Section\033[0m")  // Green
+		fmt.Println("\033[1;32m2. Tenant Section\033[0m")    // Green
 		fmt.Println("\033[1;32m3. View Your Profile\033[0m") // Green
 		fmt.Println("\033[1;31m4. Logout\033[0m")            // Red
 		fmt.Print("\nEnter your choice: ")
@@ -32,6 +32,7 @@ func (ui *UI) onLoginDashboard(username string) {
 		case 2:
 			fmt.Println("\033[1;33m\nYou are now in the Buyer Section.\033[0m") // Yellow
 			// Add functionality for Buyer Section here
+			ui.TenantDashboardUI()
 		case 3:
 			fmt.Println("\033[1;33m\nHere is your profile information.\033[0m") // Yellow
 			// Add functionality to view profile here
