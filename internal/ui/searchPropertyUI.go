@@ -19,7 +19,7 @@ func (ui *UI) SearchPropertyUI() {
 
 		// Check if the input is valid
 		if err != nil || propertyType < 1 || propertyType > 3 {
-			fmt.Println("Invalid input. Please enter a valid property type (1, 2, or 3).")
+			fmt.Println("\033[1;31mInvalid input. Please enter a valid property type (1, 2, or 3).\033[0m") // Red
 			continue
 		}
 
@@ -65,18 +65,16 @@ func (ui *UI) SearchPropertyUI() {
 
 		prop := properties[choice-1]
 
-		fmt.Printf("Property ID: %s\n", prop.ID)
-
 		utils.DisplayProperty(prop)
-		fmt.Println("\nLandlord Details are:")
-		fmt.Println("Fetching landlord details...")
 
+		// Fetch landlord details
 		landlord, err := ui.userService.FindByUsername(prop.LandlordUsername)
 		if err != nil {
 			fmt.Printf("\033[1;31mError fetching landlord details: %v\033[0m\n", err) // Red
 			continue
 		}
 
+		fmt.Println("\nLandlord Details are:")
 		fmt.Printf("  Landlord Name: %s\n", landlord.Name)
 		fmt.Printf("  Landlord Phone: %s\n", landlord.PhoneNumber)
 		fmt.Printf("  Landlord Email: %s\n", landlord.Email)
@@ -96,7 +94,23 @@ func (ui *UI) SearchPropertyUI() {
 				fmt.Println("\033[1;32mProperty added to wishlist successfully.\033[0m") // Green
 			}
 		}
+		// Option to request property
+		fmt.Print("\nWould you like to request this property? (yes/no): ")
+		var request string
+		fmt.Scan(&request)
+		request = strings.ToLower(request)
 
+		if request == "yes" {
+
+			err = ui.requestService.CreatePropertyRequest(utils.ActiveUser, prop.ID, prop.LandlordUsername)
+			if err != nil {
+				fmt.Printf("\033[1;31mError requesting property: %v\033[0m\n", err) // Red
+			} else {
+				fmt.Println("\033[1;32mProperty request sent successfully.\033[0m") // Green
+			}
+		}
+
+		// Option to see details of another property
 		fmt.Print("\nWould you like to see details of another property? (yes/no): ")
 		var response string
 		fmt.Scan(&response)

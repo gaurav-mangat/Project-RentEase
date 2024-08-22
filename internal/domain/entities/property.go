@@ -4,10 +4,10 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Property struct {
 	ID               primitive.ObjectID `bson:"_id"`           // MongoDB unique ID
-	PropertyType     int                `bson:"property_type"` // 1: Commercial, 2: House, 3: Flat
+	PropertyType     int                `json:"property_type"` // 1: Commercial, 2: House, 3: Flat
 	Title            string             `bson:"title"`
 	Address          Address            `bson:"address"`
-	LandlordUsername string             `bson:"landlord_username"`
+	LandlordUsername string             `json:"landlord_username"`
 	RentAmount       float64            `bson:"rent_amount"`
 	Applications     []string           `bson:"applications"`
 	IsApproved       bool               `bson:"is_approved"`

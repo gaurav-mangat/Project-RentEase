@@ -12,7 +12,8 @@ func (ui *UI) TenantDashboardUI() {
 		fmt.Println("\033[1;34m========================\033[0m")   // Blue
 		fmt.Println("1. Search Property")
 		fmt.Println("2. Your Wishlist")
-		fmt.Println("3. Logout")
+		fmt.Println("3. Request Status")
+		fmt.Println("4. Go Back")
 
 		choice := utils.ReadInput("\nEnter your choice: ")
 
@@ -21,7 +22,11 @@ func (ui *UI) TenantDashboardUI() {
 			ui.SearchPropertyUI()
 		case "2":
 			ui.ShowWishlist()
+
 		case "3":
+			ui.ShowNotifications()
+
+		case "4":
 			fmt.Println("\033[1;32mLogging out...\033[0m") // Green
 			return
 		default:

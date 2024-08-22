@@ -108,7 +108,8 @@ func ReadPincode() int {
 
 // DisplayProperty prints the details of a single property in a structured format.
 func DisplayProperty(property entities.Property) {
-	fmt.Print("Property Type: ")
+
+	fmt.Print("Property Type:  ")
 	switch property.PropertyType {
 	case 1:
 		fmt.Println("Commercial")
