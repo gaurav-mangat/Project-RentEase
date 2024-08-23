@@ -7,20 +7,25 @@ The application is built using Go and MongoDB for robust and scalable performanc
 Landlord Dashboard:
 
 List properties for rent
+
 Update property details
+
 View tenant requests
 
 Tenant Dashboard:
 
 Search for available properties
+
 Request to rent a property
+
 Add properties to a wishlist
 
 Admin Dashboard:
 
 Approve property listings
+
 Manage user accounts
-Oversee platform operations
+
 
 User Authentication: Secure login system with support for landlords, tenants, and admins.
 
