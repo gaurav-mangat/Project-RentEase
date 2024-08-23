@@ -26,11 +26,11 @@ func (ui *UI) onLoginDashboard(username string) {
 
 		switch choice {
 		case 1:
-			fmt.Println("\033[1;33m\nYou are now in the Seller Section.\033[0m") // Yellow
+			fmt.Println("\033[1;33m\nYou are now in the Landlord Section.\033[0m") // Yellow
 			// Add functionality for Seller Section here
 			ui.sellerDashboard()
 		case 2:
-			fmt.Println("\033[1;33m\nYou are now in the Buyer Section.\033[0m") // Yellow
+			fmt.Println("\033[1;33m\nYou are now in the Tenant Section.\033[0m") // Yellow
 			// Add functionality for Buyer Section here
 			ui.TenantDashboardUI()
 		case 3:

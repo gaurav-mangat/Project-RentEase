@@ -14,7 +14,6 @@ func (ui *UI) LandlordRequestsDashboard() {
 	}
 
 	// Fetch requests for the landlord
-	fmt.Println("Landlord name :", landlord.Username)
 
 	requests, err := ui.requestService.GetRequestsForLandlord(landlord.Username)
 	if err != nil {

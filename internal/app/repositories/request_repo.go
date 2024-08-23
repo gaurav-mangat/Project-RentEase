@@ -76,7 +76,8 @@ func (repo *RequestRepo) FindByLandlordName(ctx context.Context, landlordName st
 
 func (repo *RequestRepo) UpdateRequest(requestID primitive.ObjectID, status string) error {
 	filter := bson.M{"_id": requestID}
-	update := bson.M{"$set": bson.M{"request_status": status}}
+	update := bson.M{"$set": bson.M{"requestStatus": status}}
 	_, err := repo.collection.UpdateOne(context.Background(), filter, update)
+
 	return err
 }

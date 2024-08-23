@@ -20,10 +20,6 @@ func main() {
 	propertyService := services.NewPropertyService(propertyRepo)
 
 	requestRepo, err := repositories.NewRequestRepo("mongodb://localhost:27017/request", "RentEase", "request")
-	if err != nil {
-		fmt.Println("Error initializing repository:", err)
-		return
-	}
 	requestService := services.NewRequestService(requestRepo)
 	appUI := ui.NewUI(userService, propertyService, requestService)
 	appUI.AppDashboard()
