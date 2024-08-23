@@ -16,6 +16,7 @@ func (ui *UI) ListPropertyUI() {
 	title := utils.ReadInput("\nEnter property title: ")
 
 	// Collect common property details
+	fmt.Println("Please provide the address details of your property :")
 	area := utils.ReadInput("Enter locality: ")
 	city := utils.ReadInput("Enter city: ")
 	state := utils.ReadInput("Enter state: ")
@@ -24,14 +25,15 @@ func (ui *UI) ListPropertyUI() {
 	pincode = utils.ReadPincode()
 	landlordUsername := utils.ActiveUser
 
-	fmt.Print("Enter your expected rent amount: ")
-	var rentAmount int
-	fmt.Scanf("%f", &rentAmount)
+	fmt.Print("Enter your expected rent amount (in rupees): ")
+	var rentAmount float64
+	fmt.Scanf("%.2f", &rentAmount)
 
 	var details interface{}
 	switch propertyType {
 	case 1:
 		// Collect Commercial-specific details
+		_ = utils.ReadInput("")
 		floorArea := utils.ReadInput("Enter floor area: ")
 		subType := utils.ReadInput("Enter subtype (shop, factory, warehouse): ")
 
@@ -41,9 +43,10 @@ func (ui *UI) ListPropertyUI() {
 		}
 	case 2:
 		// Collect House-specific details
+
 		fmt.Print("Enter number of rooms: ")
 		var noOfRooms int
-		_, _ = fmt.Scan(&noOfRooms)
+		_, _ = fmt.Scanf("%d", &noOfRooms)
 
 		furnishedCategory := utils.ReadInput("Enter furnished category: ")
 		amenitiesStr := utils.ReadInput("Enter amenities (comma separated): ")
@@ -56,6 +59,8 @@ func (ui *UI) ListPropertyUI() {
 		}
 	case 3:
 		// Collect Flat-specific details
+		_ = utils.ReadInput("")
+
 		furnishedCategory := utils.ReadInput("Enter furnished category: ")
 		amenitiesStr := utils.ReadInput("Enter amenities (comma separated): ")
 		amenities := strings.Split(amenitiesStr, ",")
@@ -88,8 +93,8 @@ func (ui *UI) ListPropertyUI() {
 	// Save property to the repository
 	err := ui.propertyService.ListProperty(property)
 	if err != nil {
-		fmt.Println("Error listing property:", err)
+		fmt.Println("\nError listing property:", err)
 	} else {
-		fmt.Println("Property listed successfully.")
+		fmt.Println("\nProperty listed successfully.")
 	}
 }

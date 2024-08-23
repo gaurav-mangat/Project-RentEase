@@ -3,7 +3,6 @@ package ui
 import (
 	"fmt"
 	"rentease/pkg/utils"
-	"strings"
 )
 
 func (ui *UI) SearchPropertyUI() {
@@ -64,7 +63,6 @@ func (ui *UI) SearchPropertyUI() {
 		}
 
 		prop := properties[choice-1]
-
 		utils.DisplayProperty(prop)
 
 		// Fetch landlord details
@@ -74,53 +72,55 @@ func (ui *UI) SearchPropertyUI() {
 			continue
 		}
 
-		fmt.Println("\nLandlord Details are:")
-		fmt.Printf("  Landlord Name: %s\n", landlord.Name)
-		fmt.Printf("  Landlord Phone: %s\n", landlord.PhoneNumber)
-		fmt.Printf("  Landlord Email: %s\n", landlord.Email)
-		fmt.Printf("  Landlord Address: %s\n", landlord.Address)
+		fmt.Println("\n\033[1;34mLandlord Details\033[0m")
+		fmt.Println("  Name: ", landlord.Name)
+		fmt.Println("  Phone: ", landlord.PhoneNumber)
+		fmt.Println("  Email: ", landlord.Email)
+		fmt.Println("  Address: ", landlord.Address)
 
-		// Option to add property to wishlist
-		fmt.Print("\nWould you like to add this property to your wishlist? (yes/no): ")
-		var addToWishlist string
-		fmt.Scan(&addToWishlist)
-		addToWishlist = strings.ToLower(addToWishlist)
+		for {
+			fmt.Println("\n\033[1;36mWhat would you like to do?\033[0m")
+			fmt.Println("1. Add to Wishlist")
+			fmt.Println("2. Request Property")
+			fmt.Println("3. View Another Property")
+			fmt.Println("4. Exit")
 
-		if addToWishlist == "yes" {
-			err := ui.userService.AddToWishlist(utils.ActiveUser, prop.ID)
-			if err != nil {
-				fmt.Printf("\033[1;31mError adding property to wishlist: %v\033[0m\n", err) // Red
-			} else {
-				fmt.Println("\033[1;32mProperty added to wishlist successfully.\033[0m") // Green
-			}
-		}
-		// Option to request property
-		fmt.Print("\nWould you like to request this property? (yes/no): ")
-		var request string
-		fmt.Scan(&request)
-		request = strings.ToLower(request)
+			var action int
+			fmt.Print("Enter your choice: ")
+			fmt.Scan(&action)
 
-		if request == "yes" {
-			if utils.ActiveUser != prop.LandlordUsername {
-				err = ui.requestService.CreatePropertyRequest(utils.ActiveUser, prop.ID, prop.LandlordUsername)
+			switch action {
+			case 1:
+				err := ui.userService.AddToWishlist(utils.ActiveUser, prop.ID)
 				if err != nil {
-					fmt.Printf("\033[1;31mError requesting property: %v\033[0m\n", err) // Red
+					fmt.Printf("\033[1;31mError adding property to wishlist: %v\033[0m\n", err) // Red
 				} else {
-					fmt.Println("\033[1;32mProperty request sent successfully.\033[0m") //  Green
+					fmt.Println("\033[1;32mProperty added to wishlist successfully.\033[0m") // Green
 				}
-			} else {
-				fmt.Println("You can't make a request for your property !")
+			case 2:
+				if utils.ActiveUser != prop.LandlordUsername {
+					err = ui.requestService.CreatePropertyRequest(utils.ActiveUser, prop.ID, prop.LandlordUsername)
+					if err != nil {
+						fmt.Printf("\033[1;31mError requesting property: %v\033[0m\n", err) // Red
+					} else {
+						fmt.Println("\033[1;32mProperty request sent successfully.\033[0m") // Green
+					}
+				} else {
+					fmt.Println("\033[1;31mYou cannot request your own property!\033[0m") // Red
+				}
+			case 3:
+				// Break inner loop to return to property list
+				break
+			case 4:
+				// Exit the entire search flow
+				return
+			default:
+				fmt.Println("\033[1;31mInvalid choice. Please select a valid option.\033[0m") // Red
 			}
-		}
 
-		// Option to see details of another property
-		fmt.Print("\nWould you like to see details of another property? (yes/no): ")
-		var response string
-		fmt.Scan(&response)
-		response = strings.ToLower(response)
-
-		if response != "yes" {
-			break
+			if action == 3 {
+				break
+			}
 		}
 	}
 }

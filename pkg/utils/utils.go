@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
+	"golang.org/x/term"
 	"os"
 	"regexp"
 	"rentease/internal/domain/entities"
@@ -123,7 +124,7 @@ func DisplayProperty(property entities.Property) {
 
 	fmt.Printf("Property Title: %s\n", property.Title)
 	fmt.Printf("Address: %s, %s, %s, %d\n", property.Address.Area, property.Address.City, property.Address.State, property.Address.Pincode)
-	fmt.Printf("Is Approved: %v\n", property.IsApprovedByAdmin)
+	fmt.Printf("Is Approved by Admin : %v\n", property.IsApprovedByAdmin)
 	fmt.Printf("Expected Rent Amount: %f\n", property.RentAmount)
 
 	fmt.Println("Other Details:")
@@ -166,4 +167,15 @@ func DisplayPropertyshortInfo(properties []entities.Property) {
 	}
 
 	//Continuously prompt the user to select a property number for more details until valid input is given
+}
+
+func GetHiddenInput(prompt string) string {
+	fmt.Print(prompt)
+	bytePassword, err := term.ReadPassword(int(os.Stdin.Fd()))
+	if err != nil {
+		fmt.Errorf("Error reading password: " + err.Error())
+		return ""
+	}
+	fmt.Println() // Print a newline after input
+	return strings.TrimSpace(string(bytePassword))
 }

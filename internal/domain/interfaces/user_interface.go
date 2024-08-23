@@ -10,4 +10,8 @@ type UserRepo interface {
 	FindByUsername(ctx context.Context, username string) (*entities.User, error)
 	CheckPassword(ctx context.Context, username string, password string) (bool, error)
 	UpdateUser(user entities.User) error
+	Delete(username string) error
+	FindAll() ([]entities.User, error)
 }
+
+// Admin

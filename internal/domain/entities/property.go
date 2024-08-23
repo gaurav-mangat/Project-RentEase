@@ -10,8 +10,8 @@ type Property struct {
 	LandlordUsername  string             `json:"landlord_username"`
 	RentAmount        float64            `bson:"rent_amount"`
 	Applications      []string           `bson:"applications"`
-	IsApprovedByAdmin bool               `bson:"is_approved"`
-	IsRented          bool               `json:"is_rented"`
+	IsApprovedByAdmin bool               `bson:"is_approved_by_admin"`
+	IsRented          bool               `bson:"isrented"`
 	Details           interface{}        `bson:"details"` // Holds specific details based on property type
 }
 

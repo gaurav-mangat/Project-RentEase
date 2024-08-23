@@ -13,6 +13,8 @@ type PropertyRepo interface {
 	DeleteListedProperty(propertyID string) error
 	//SearchProperties(area, city, state string, pincode int) ([]entities.Property, error)
 	FindByID(ctx context.Context, id primitive.ObjectID) (*entities.Property, error)
+	UpdateApprovalStatus(propertyID primitive.ObjectID, approved bool, adminUsername string) error
+	FindPendingProperties() ([]entities.Property, error)
 }
 
 //type PropertyService interface {

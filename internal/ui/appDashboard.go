@@ -6,37 +6,43 @@ import (
 
 func (ui *UI) AppDashboard() {
 
-	// Message to the user
-	fmt.Println("**************************************")
-	fmt.Println("*                                    *")
-	fmt.Println("*           RentEase                 *")
-	fmt.Println("*                                    *")
-	fmt.Println("**************************************")
+	// Decorative border with ANSI colors
+	fmt.Println("\033[1;36m******************************************\033[0m")
+	fmt.Println("\033[1;36m*                                        *\033[0m")
+	fmt.Println("\033[1;36m*            \033[1;32mWelcome to RentEase\033[1;36m         *\033[0m")
+	fmt.Println("\033[1;36m*  \033[1;32mYour one-stop solution for renting!\033[1;36m   *\033[0m")
+	fmt.Println("\033[1;36m*                                        *\033[0m")
+	fmt.Println("\033[1;36m******************************************\033[0m")
 
-	fmt.Println("\n\n 1. LogIn")
-	fmt.Println("----------------------")
-	fmt.Println(" 2. SignUp")
-	fmt.Println("----------------------")
-	fmt.Println(" 3. Exit")
+	// Main Menu
+	fmt.Println("\n\033[1;33mPlease select an option to proceed:\033[0m")
+	fmt.Println("\033[1;34m==================================\033[0m")
+	fmt.Println("\033[1;34m 1. \033[1;33m🔑 Log In\033[0m")
+	fmt.Println("\033[1;34m-----------------------------\033[0m")
+	fmt.Println("\033[1;34m 2. \033[1;33m📝 Sign Up\033[0m")
+	fmt.Println("\033[1;34m-----------------------------\033[0m")
+	fmt.Println("\033[1;34m 3. \033[1;31m❌ Exit\033[0m")
+	fmt.Println("\033[1;34m==================================\033[0m")
 	fmt.Println()
 
 	var choice int
 
-	fmt.Print("Enter your choice: ")
+	fmt.Print("\033[1;35mEnter your choice: \033[0m")
 	_, err := fmt.Scanf("%d", &choice)
 	if err != nil {
-		fmt.Println("Error reading input:", err)
+		fmt.Println("\033[1;31m⚠️ Error reading input:\033[0m", err)
 		return
 	}
 
-	if choice == 1 {
+	switch choice {
+	case 1:
 		ui.LoginDashboard()
-	} else if choice == 2 {
+	case 2:
 		ui.SignUpDashboard()
-	} else if choice == 3 {
-		fmt.Println("Successfully exited the program....")
+	case 3:
+		fmt.Println("\n\033[1;32mThank you for using RentEase! See you next time. 👋\033[0m")
 		return
-	} else {
-		fmt.Println("\nInvalid choice ")
+	default:
+		fmt.Println("\n\033[1;31m🚫 Invalid choice, please try again.\033[0m")
 	}
 }

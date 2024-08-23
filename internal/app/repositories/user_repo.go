@@ -99,3 +99,24 @@ func (repo *UserRepo) UpdateUser(user entities.User) error {
 	}
 	return nil
 }
+
+//Admin related
+
+func (ur *UserRepo) FindAll() ([]entities.User, error) {
+	ctx := context.TODO()
+	cursor, err := ur.collection.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var users []entities.User
+	err = cursor.All(ctx, &users)
+	return users, err
+}
+
+func (ur *UserRepo) Delete(username string) error {
+	ctx := context.TODO()
+	_, err := ur.collection.DeleteOne(ctx, bson.M{"username": username})
+	return err
+}

@@ -18,10 +18,11 @@ func (ui *UI) LoginDashboard() {
 		fmt.Println("\033[1;31m                          LOG IN                                \033[0m") // Red bold
 		fmt.Println("\033[1;36m----------------------------------------------------------------\033[0m")
 
-		// Read and validate username
-		username = utils.ReadInput("\n             Enter username: ")
-		if !utils.IsValidInput2(username) {
-			return
+		for {
+			username = utils.ReadInput("\n             Enter username: ")
+			if utils.IsValidInput2(username) {
+				break
+			}
 		}
 
 		// Read and validate password
@@ -35,9 +36,18 @@ func (ui *UI) LoginDashboard() {
 		if loginSuccessful {
 			// Successful login
 			fmt.Println("\033[1;32mLogin successful!\033[0m") // Green
-			ui.onLoginDashboard(username)
 
-			return
+			//Checking for admin
+			user, err := ui.userService.FindByUsername(utils.ActiveUser)
+			if err != nil {
+				fmt.Println("\033[1;31mError finding user :\033[0m", err)
+			}
+			if user.Role == "Admin" {
+				ui.AdminDashboard()
+			} else {
+				ui.onLoginDashboard(username)
+			}
+			ui.AppDashboard()
 		} else {
 			// Failed login, decrement attempts left
 			attemptsLeft--

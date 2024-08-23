@@ -90,3 +90,12 @@ func (us *UserService) AddToWishlist(username string, propertyID primitive.Objec
 func (us *UserService) UpdateUser(user entities.User) error {
 	return us.userRepo.UpdateUser(user)
 }
+
+// Admin specific services
+func (us *UserService) GetAllUsers() ([]entities.User, error) {
+	return us.userRepo.FindAll()
+}
+
+func (us *UserService) DeleteUser(username string) error {
+	return us.userRepo.Delete(username)
+}

@@ -93,3 +93,13 @@ func (ps *PropertyService) FindByID(id primitive.ObjectID) (entities.Property, e
 
 	return *property, nil
 }
+
+// Admin
+
+func (ps *PropertyService) GetPendingProperties() ([]entities.Property, error) {
+	return ps.propertyRepo.FindPendingProperties()
+}
+
+func (ps *PropertyService) ApproveProperty(propertyID primitive.ObjectID, adminUsername string) error {
+	return ps.propertyRepo.UpdateApprovalStatus(propertyID, true, adminUsername)
+}

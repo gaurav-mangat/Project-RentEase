@@ -11,10 +11,9 @@ func (ui *UI) onLoginDashboard(username string) {
 		fmt.Println("\033[1;31m                          DASHBOARD                            \033[0m")  // Red bold
 		fmt.Println("\033[1;36m----------------------------------------------------------------\033[0m") // Sky blue
 
-		fmt.Println("\033[1;32m1. LandLord Section\033[0m")  // Green
-		fmt.Println("\033[1;32m2. Tenant Section\033[0m")    // Green
-		fmt.Println("\033[1;32m3. View Your Profile\033[0m") // Green
-		fmt.Println("\033[1;31m4. Logout\033[0m")            // Red
+		fmt.Println("\033[1;32m1. LandLord Section\033[0m") // Green
+		fmt.Println("\033[1;32m2. Tenant Section\033[0m")   // Green
+		fmt.Println("\033[1;31m3. Logout\033[0m")           // Red
 		fmt.Print("\nEnter your choice: ")
 
 		var choice int

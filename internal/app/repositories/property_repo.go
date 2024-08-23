@@ -157,3 +157,30 @@ func (r *PropertyRepo) FindByID(ctx context.Context, id primitive.ObjectID) (*en
 
 	return &property, nil
 }
+
+// For admin
+func (r *PropertyRepo) FindPendingProperties() ([]entities.Property, error) {
+	ctx := context.TODO()
+	filter := bson.M{"is_approved_by_admin": false}
+	cursor, err := r.collection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var properties []entities.Property
+	err = cursor.All(ctx, &properties)
+	return properties, err
+}
+
+func (r *PropertyRepo) UpdateApprovalStatus(propertyID primitive.ObjectID, approved bool, adminUsername string) error {
+	ctx := context.TODO()
+	filter := bson.M{"_id": propertyID}
+	update := bson.M{
+		"$set": bson.M{
+			"is_approved_by_admin": approved,
+		},
+	}
+	_, err := r.collection.UpdateOne(ctx, filter, update)
+	return err
+}

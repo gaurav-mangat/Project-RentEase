@@ -15,7 +15,6 @@ func (ui *UI) sellerDashboard() {
 		fmt.Println("\033[1;32m1. List Your Property\033[0m")              // Green
 		fmt.Println("\033[1;32m2. View and Manage Listed Property\033[0m") // Green
 		fmt.Println("\033[1;32m3. Managing rent request\033[0m")           // Green
-		fmt.Println("\033[1;32m3. Chats\033[0m")                           // Green
 		fmt.Println("\033[1;31m4. Back to Main Dashboard\033[0m")          // Red
 		fmt.Print("\nEnter your choice: ")
 
@@ -28,7 +27,7 @@ func (ui *UI) sellerDashboard() {
 
 		switch choice {
 		case 1:
-			fmt.Println("\033[1;33m\nListing a new property...\033[0m") // Yellow
+			fmt.Println("\033[1;33m\n\nListing a new property...\033[0m") // Yellow
 			ui.ListPropertyUI()
 		case 2:
 			fmt.Println("\033[1;33m\nViewing and managing listed properties...\033[0m") // Yellow
