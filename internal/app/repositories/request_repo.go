@@ -4,7 +4,6 @@ package repositories
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -74,8 +73,8 @@ func (repo *RequestRepo) FindByLandlordName(ctx context.Context, landlordName st
 	return requests, nil
 }
 
-func (repo *RequestRepo) UpdateRequest(requestID primitive.ObjectID, status string) error {
-	filter := bson.M{"_id": requestID}
+func (repo *RequestRepo) UpdateRequest(request entities.Request, status string) error {
+	filter := bson.M{"_id": request.ID}
 	update := bson.M{"$set": bson.M{"requestStatus": status}}
 	_, err := repo.collection.UpdateOne(context.Background(), filter, update)
 

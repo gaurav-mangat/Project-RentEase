@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"rentease/internal/domain/entities"
 	"rentease/internal/domain/interfaces"
@@ -30,10 +31,12 @@ func (ps *PropertyService) GetAllListedProperties(activeUseronly bool) ([]entiti
 
 // UpdateListedProperty updates a property in the repository.
 func (ps *PropertyService) UpdateListedProperty(property entities.Property) error {
+
+	fmt.Println("In UpdateListedProperty Function ", property.IsRented)
 	// Check if the property is approved before updating
-	if property.IsApproved {
+	if property.IsApprovedByAdmin && !property.IsRented {
 		// Reset approval status if the property was approved
-		property.IsApproved = false
+		property.IsApprovedByAdmin = false
 	}
 	return ps.propertyRepo.UpdateListedProperty(property)
 }

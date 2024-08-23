@@ -85,10 +85,18 @@ func (ui *UI) LandlordRequestsDashboard() {
 	}
 
 	// Update the request status
-	err = ui.requestService.UpdateRequestStatus(req.ID, status)
+	err = ui.requestService.UpdateRequestStatus(req, status)
 	if err != nil {
 		fmt.Printf("\033[1;31mError updating request status: %v\033[0m\n", err) // Red
 	} else {
 		fmt.Println("\033[1;32mRequest status updated successfully.\033[0m") // Green
+
+		// Updating our IsRented fiels as request is approved
+		fmt.Println("Status: ", status)
+		if status == "accepted" {
+			prop, _ := ui.propertyService.FindByID(req.PropertyID)
+			prop.IsRented = true
+			_ = ui.propertyService.UpdateListedProperty(prop)
+		}
 	}
 }

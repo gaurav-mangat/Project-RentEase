@@ -37,8 +37,8 @@ func (rs *RequestService) GetRequestsForLandlord(landlordName string) ([]entitie
 	return rs.requestRepo.FindByLandlordName(ctx, landlordName)
 }
 
-func (rs *RequestService) UpdateRequestStatus(requestID primitive.ObjectID, status string) error {
-	return rs.requestRepo.UpdateRequest(requestID, status)
+func (rs *RequestService) UpdateRequestStatus(request entities.Request, status string) error {
+	return rs.requestRepo.UpdateRequest(request, status)
 }
 
 // New Method

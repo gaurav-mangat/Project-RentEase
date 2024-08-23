@@ -123,7 +123,7 @@ func DisplayProperty(property entities.Property) {
 
 	fmt.Printf("Property Title: %s\n", property.Title)
 	fmt.Printf("Address: %s, %s, %s, %d\n", property.Address.Area, property.Address.City, property.Address.State, property.Address.Pincode)
-	fmt.Printf("Is Approved: %v\n", property.IsApproved)
+	fmt.Printf("Is Approved: %v\n", property.IsApprovedByAdmin)
 	fmt.Printf("Expected Rent Amount: %f\n", property.RentAmount)
 
 	fmt.Println("Other Details:")

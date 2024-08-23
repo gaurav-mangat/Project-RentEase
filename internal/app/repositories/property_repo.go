@@ -42,6 +42,7 @@ func (r *PropertyRepo) SaveProperty(property entities.Property) error {
 // GetProperties retrieves properties based on the provided filter option.
 // If `forActiveUserOnly` is true, it returns properties for the active user only.
 // If `forActiveUserOnly` is false, it returns properties for all users.
+
 func (r *PropertyRepo) GetAllListedProperties(forActiveUserOnly bool) ([]entities.Property, error) {
 	var filter bson.D
 
@@ -51,7 +52,7 @@ func (r *PropertyRepo) GetAllListedProperties(forActiveUserOnly bool) ([]entitie
 		filter = bson.D{{"landlordusername", utils.ActiveUser}}
 	} else {
 		// No filter, retrieve all properties
-		filter = bson.D{}
+		filter = bson.D{{"isrented", false}}
 	}
 
 	// Query the database with the filter
@@ -113,14 +114,15 @@ func (r *PropertyRepo) UpdateListedProperty(property entities.Property) error {
 			{"address", property.Address},
 			{"landlordusername", property.LandlordUsername},
 			{"rentamount", property.RentAmount},
-			{"isapproved", property.IsApproved},
+			{"isapproved", property.IsApprovedByAdmin},
+			{"isrented", property.IsRented},
 			{"details", property.Details},
 		}},
 	}
 
 	// If the property is approved, reset its approval status to false
-	if property.IsApproved {
-		property.IsApproved = false
+	if property.IsApprovedByAdmin {
+		property.IsApprovedByAdmin = false
 	}
 
 	_, err := r.collection.UpdateOne(context.TODO(), filter, update)

@@ -43,7 +43,7 @@ func (ui *UI) ListPropertyUI() {
 		// Collect House-specific details
 		fmt.Print("Enter number of rooms: ")
 		var noOfRooms int
-		fmt.Scanf("%d", &noOfRooms)
+		_, _ = fmt.Scan(&noOfRooms)
 
 		furnishedCategory := utils.ReadInput("Enter furnished category: ")
 		amenitiesStr := utils.ReadInput("Enter amenities (comma separated): ")
@@ -75,13 +75,14 @@ func (ui *UI) ListPropertyUI() {
 	}
 
 	property := entities.Property{
-		ID:               primitive.NewObjectID(), // Generate a new unique ID
-		PropertyType:     propertyType,
-		Title:            title,
-		Address:          entities.Address{Area: area, City: city, State: state, Pincode: pincode},
-		LandlordUsername: landlordUsername,
-		IsApproved:       false,
-		Details:          details,
+		ID:                primitive.NewObjectID(), // Generate a new unique ID
+		PropertyType:      propertyType,
+		Title:             title,
+		Address:           entities.Address{Area: area, City: city, State: state, Pincode: pincode},
+		LandlordUsername:  landlordUsername,
+		IsRented:          false,
+		IsApprovedByAdmin: false,
+		Details:           details,
 	}
 
 	// Save property to the repository

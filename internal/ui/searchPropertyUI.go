@@ -101,12 +101,15 @@ func (ui *UI) SearchPropertyUI() {
 		request = strings.ToLower(request)
 
 		if request == "yes" {
-
-			err = ui.requestService.CreatePropertyRequest(utils.ActiveUser, prop.ID, prop.LandlordUsername)
-			if err != nil {
-				fmt.Printf("\033[1;31mError requesting property: %v\033[0m\n", err) // Red
+			if utils.ActiveUser != prop.LandlordUsername {
+				err = ui.requestService.CreatePropertyRequest(utils.ActiveUser, prop.ID, prop.LandlordUsername)
+				if err != nil {
+					fmt.Printf("\033[1;31mError requesting property: %v\033[0m\n", err) // Red
+				} else {
+					fmt.Println("\033[1;32mProperty request sent successfully.\033[0m") //  Green
+				}
 			} else {
-				fmt.Println("\033[1;32mProperty request sent successfully.\033[0m") // Green
+				fmt.Println("You can't make a request for your property !")
 			}
 		}
 

@@ -33,10 +33,10 @@ func (ui *UI) onLoginDashboard(username string) {
 			fmt.Println("\033[1;33m\nYou are now in the Tenant Section.\033[0m") // Yellow
 			// Add functionality for Buyer Section here
 			ui.TenantDashboardUI()
+		//case 3:
+		//	fmt.Println("\033[1;33m\nHere is your profile information.\033[0m") // Yellow
+		// Add functionality to view profile here
 		case 3:
-			fmt.Println("\033[1;33m\nHere is your profile information.\033[0m") // Yellow
-			// Add functionality to view profile here
-		case 4:
 			fmt.Println("\033[1;32m\nYou have been logged out.\033[0m") // Green
 			return
 		default:

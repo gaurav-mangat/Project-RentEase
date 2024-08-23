@@ -171,8 +171,8 @@ func (ui *UI) UpdatePropertyUI(property entities.Property) {
 	}
 
 	// Reset approval status if the property was approved
-	if property.IsApproved {
-		updatedProperty.IsApproved = false
+	if property.IsApprovedByAdmin {
+		updatedProperty.IsApprovedByAdmin = false
 	}
 
 	// Save updated property
